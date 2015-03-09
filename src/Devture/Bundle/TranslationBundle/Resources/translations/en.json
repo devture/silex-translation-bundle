@@ -1,0 +1,12 @@
+{
+	"devture_translation": {
+		"translations": "Translations",
+		"list_type": {
+			"translated": "Translated",
+			"untranslated": "Untranslated",
+			"all": "All"
+		},
+		"save_translations": "Save Translations",
+		"error_while_saving_please_reload": "Error while saving. Reload the page and try again."
+	}
+}

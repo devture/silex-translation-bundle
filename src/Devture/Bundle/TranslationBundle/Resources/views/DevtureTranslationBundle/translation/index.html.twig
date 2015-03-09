@@ -1,0 +1,44 @@
+{% extends layout %}
+
+{% block content %}
+	{% for sourceResource in sourceResources %}
+		<h4 style="margin-top: 0;">{{ sourceResource.name }}</h4>
+
+		<ul>
+		{% for localizedResource in sourceResource.localizedResources %}
+			{% set translationStats = localizedResource.determineTranslationStatsAgainst(sourceResource) %}
+			<li>
+				<a
+					href="{{ path(namespace ~ '.edit', {'resourceId': sourceResource.id, 'language': localizedResource.localeKey}) }}"
+					style="display: block;">
+					<i class="flag {{ localizedResource.localeKey }}"></i>
+
+					{{ devture_translation_get_locale_name(namespace, localizedResource.localeKey) }}
+
+					({{ translationStats.translatedCount }}/{{ translationStats.totalCount }}) -
+					{{ translationStats.translatedPercentage }}%
+
+					{% set progress_color_class = (translationStats.translatedPercentage == 100 ? 'success' : 'warning') %}
+
+					<span class="progress pull-right" style="width: 20%;">
+						<div
+							class="progress-bar progress-bar-{{ progress_color_class }}" style="text-align: right; width: {{ translationStats.translatedPercentage }}%;">
+							{% if translationStats.translatedPercentage >= 50 %}
+								{{ translationStats.translatedPercentage }}%
+							{% endif %}
+						</div>
+						<div
+							class="progress-bar progress-bar-danger" style="text-align: right; width: {{ 100 - translationStats.translatedPercentage }}%;">
+							{% if translationStats.translatedPercentage < 50 %}
+								{{ translationStats.translatedPercentage }}%
+							{% endif %}
+						</div>
+					</span>
+				</a>
+			</li>
+		{% endfor %}
+		</ul>
+
+		{% if not loop.last %}<hr />{% endif %}
+	{% endfor %}
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends layout %}
+
+{% block content %}
+	<h3 style="margin-top: 0;">
+		<a href="{{ path(namespace ~ '.manage') }}">{{ 'devture_translation.translations'|trans }}</a>
+		/
+		{{ sourceResource.name }}
+	</h3>
+
+	<form action="post" id="js-form-translations">
+		<div class="clearfix">
+			<div class="pull-left">
+				<div class="btn-group">
+					<button type="button" class="btn btn-sm btn-info active js-btn-type-change" data-type="untranslated">
+						{{ 'devture_translation.list_type.untranslated'|trans }}
+						(<span id="js-count-untranslated">..</span>)
+					</button>
+					<button type="button" class="btn btn-sm btn-default js-btn-type-change" data-type="translated">
+						{{ 'devture_translation.list_type.translated'|trans }}
+						(<span id="js-count-translated">..</span>)
+					</button>
+					<button type="button" class="btn btn-sm btn-default js-btn-type-change" data-type="all">
+						{{ 'devture_translation.list_type.all'|trans }}
+						(<span id="js-count-all">..</span>)
+					</button>
+				</div>
+			</div>
+
+			<div class="pull-right">
+				<i class="glyphicon glyphicon-ok text-success" id="js-success-indicator" style="visibility: hidden;"></i>
+
+				<button class="btn btn-sm btn-primary" type="submit">
+					<i class="glyphicon glyphicon-floppy-disk"></i>
+					{{ 'devture_translation.save_translations'|trans }}
+				</button>
+			</div>
+		</div>
+
+		<hr style="margin: 7px 0;" />
+
+		<div class="row">
+			<div class="col-lg-5">
+				<h4 class="text-center" style="margin-top: 0;">
+					<i class="flag {{ sourceResource.localeKey }}"></i>
+					{{ devture_translation_get_locale_name(namespace, sourceResource.localeKey) }}
+				</h4>
+			</div>
+			<div class="col-lg-offset-2 col-lg-5">
+				<h4 class="text-center" style="margin-top: 0;">
+					<i class="flag {{ localizedResource.localeKey }}"></i>
+					{{ devture_translation_get_locale_name(namespace, localizedResource.localeKey) }}
+				</h4>
+			</div>
+		</div>
+
+		<hr style="margin: 5px 0;" />
+
+		<div style="max-height: 400px; height: auto; overflow-y: auto; overflow-x: hidden; padding-right: 10px;">
+			{% for translationString in localizedResource.translationPack %}
+				{% set sourceTranslationString = sourceResource.translationPack.getByKey(translationString.key) %}
+				<div class="js-translation-container js-translation-container-{{ translationString.key|replace('.', '-') }}"
+					data-translated="{{ translationString.isTranslatedVersionOf(sourceTranslationString) ? 'true' : 'false' }}">
+					<small>{{ translationString.key }}</small>
+
+					<br />
+
+					<div class="form-group row">
+						<div class="col-lg-5">
+							<textarea class="form-control" readonly="readonly" tabindex="0">{{ sourceTranslationString.value }}</textarea>
+						</div>
+						<div class="col-lg-2 text-center">
+							<i class="glyphicon glyphicon-arrow-right"></i>
+						</div>
+						<div class="col-lg-5">
+							<textarea class="form-control" name="translations[{{ translationString.key }}][translation]" tabindex="{{ loop.index }}">{{ translationString.value }}</textarea>
+							<input type="hidden" name="translations[{{ translationString.key }}][sourceValueHash]" value="{{ sourceTranslationString.sourceValueHash }}" />
+						</div>
+					</div>
+
+					<hr />
+				</div>
+			{% endfor %}
+		</div>
+	</form>
+{% endblock %}
+
+{% block js %}
+	{{ parent() }}
+
+	(function () {
+		var refilterList = function () {
+			var type = $('.js-btn-type-change.active').data('type');
+			var totalCount = 0;
+			var translatedCount = 0;
+
+			$('.js-translation-container').each(function () {
+				var isTranslated = $(this).data('translated');
+				var shouldShow = false;
+
+				totalCount += 1;
+				if (isTranslated) {
+					translatedCount += 1;
+				}
+
+				if (type === 'translated') {
+					shouldShow = isTranslated;
+				} else if (type === 'untranslated') {
+					shouldShow = !isTranslated;
+				} else { //type === 'all'
+					shouldShow = true;
+				}
+
+				if (shouldShow) {
+					$(this).removeClass('hide');
+				} else {
+					$(this).addClass('hide');
+				}
+			});
+
+			$('#js-count-untranslated').text(totalCount - translatedCount);
+			$('#js-count-translated').text(translatedCount);
+			$('#js-count-all').text(totalCount);
+		};
+
+		$('#js-form-translations').submit(function (ev) {
+			ev.preventDefault();
+
+			var data = $(this).serializeArray();
+
+			$.ajax({
+				"type": "post",
+				"dataType": "json",
+				"data": data,
+				"url": {{ app.request.requestUri|json_encode|raw }}
+			}).done(function (response) {
+				if (response.ok) {
+					$('#js-success-indicator').css('visibility', 'visible');
+
+					window.setTimeout(function () {
+						$('#js-success-indicator').css('visibility', 'hidden');
+					}, 1000);
+
+					for (var key in response.packStatus) {
+						$('.js-translation-container-' + key.replace(/\./g, '-')).data('translated', response.packStatus[key]);
+					}
+					refilterList();
+				} else {
+					alert(response.errors.join(' '));
+				}
+			}).fail(function () {
+				alert({{ 'devture_translation.error_while_saving_please_reload'|trans|json_encode|raw }});
+			});
+		});
+
+		$('.js-btn-type-change').click(function (ev) {
+			$('.js-btn-type-change').removeClass('active btn-info').addClass('btn-default');
+			$(this).addClass('active btn-info');
+
+			refilterList();
+		});
+
+		$('.js-btn-type-change.active').trigger('click');
+	})();
+{% endblock %}

@@ -1,0 +1,19 @@
+{
+	"name": "devture/silex-translation-bundle",
+	"description": "Silex bundle that allows .json files to be translated between multiple languages.",
+	"authors": [
+		{
+			"name": "Slavi Pantaleev",
+			"email": "s.pantaleev@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=5.3.0",
+		"devture/silex-framework-bundle": "1.0.*"
+	},
+	"autoload": {
+		"psr-0": {
+			"Devture\\Bundle\\TranslationBundle\\": "src/"
+		}
+	}
+}
