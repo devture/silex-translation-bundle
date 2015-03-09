@@ -9,7 +9,8 @@
 	],
 	"require": {
 		"php": ">=5.3.0",
-		"devture/silex-framework-bundle": "1.0.*"
+		"devture/silex-framework-bundle": "1.0.*",
+		"devture/silex-localization-bundle" : "2.*"
 	},
 	"autoload": {
 		"psr-0": {
