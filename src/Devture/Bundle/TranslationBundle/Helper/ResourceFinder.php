@@ -66,7 +66,7 @@ class ResourceFinder {
 	}
 
 	private function getHumanFriendlyNameByPath($filePath) {
-		if (preg_match('/Bundle\/(.+?)\/Resources\/translations\/.+?\.json$/', $filePath, $matches)) {
+		if (preg_match('/Bundle\/(.+?)\/Resources\/translations\/([^\/]+)\.json$/', $filePath, $matches)) {
 			return $matches[1];
 		}
 
