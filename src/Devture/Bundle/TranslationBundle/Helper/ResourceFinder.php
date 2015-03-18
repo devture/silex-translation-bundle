@@ -22,7 +22,7 @@ class ResourceFinder {
 	 * @return multitype:\Devture\Bundle\TranslationBundle\Model\SourceResource
 	 */
 	public function findAll() {
-		$cmd = 'find ' . escapeshellarg($this->basePath) . ' -name ' . $this->sourceLocaleKey . '.json | grep -v "/vendor/"';
+		$cmd = 'find ' . escapeshellarg($this->basePath) . ' -name ' . $this->sourceLocaleKey . '.json';
 		$output = trim(shell_exec($cmd));
 
 		$resources = array();
