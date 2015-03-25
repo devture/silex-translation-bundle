@@ -1,0 +1,12 @@
+{
+	"devture_translation": {
+		"translations": "翻訳",
+		"list_type": {
+			"translated": "翻訳済み",
+			"untranslated": "翻訳未対応",
+			"all": "全て"
+		},
+		"save_translations": "翻訳を保存",
+		"error_while_saving_please_reload": "エラーが発生しました。再読み込みしてからもう一度お試しください。"
+	}
+}
