@@ -19,6 +19,9 @@ class ResourcePersister {
 			$hashes[$translationString->getKey()] = $translationString->getSourceValueHash();
 		}
 
+		ksort($translations);
+		ksort($hashes);
+
 		$translations = $this->unflatten($translations);
 
 		$result = @file_put_contents($localizedResource->getPath(), $this->jsonEncode($translations));
