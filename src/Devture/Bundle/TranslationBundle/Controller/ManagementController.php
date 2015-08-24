@@ -14,6 +14,22 @@ class ManagementController extends BaseController {
 		));
 	}
 
+	public function searchAction(Request $request) {
+		$searchRequest = $this->getSearchRequestBuilder()->buildFromHttpRequest($request);
+
+		if ($searchRequest->isEmpty()) {
+			$searchResults = null;
+		} else {
+			$searchResults = $this->getSearcher()->search($searchRequest);
+		}
+
+		return $this->renderView('DevtureTranslationBundle/translation/search.html.twig', array(
+			'searchRequest' => $searchRequest,
+			'searchResults' => $searchResults,
+			'sourceResources' => $this->getResourceFinder()->findAll(),
+		));
+	}
+
 	public function editAction(Request $request, $resourceId, $language) {
 		$sourceResource = $this->getResourceFinder()->findOneById($resourceId);
 
@@ -51,9 +67,15 @@ class ManagementController extends BaseController {
 			return $this->json(array('ok' => true, 'packStatus' => $packStatus));
 		}
 
+		$tabToActivate = $request->query->get('tab', 'untranslated');
+		if (!in_array($tabToActivate, array('untranslated', 'translated', 'all'))) {
+			$tabToActivate = 'untranslated';
+		}
+
 		return $this->renderView('DevtureTranslationBundle/translation/edit.html.twig', array(
 			'sourceResource' => $sourceResource,
 			'localizedResource' => $localizedResource,
+			'tabToActivate' => $tabToActivate,
 		));
 	}
 

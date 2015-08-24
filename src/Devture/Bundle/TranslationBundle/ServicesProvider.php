@@ -39,6 +39,18 @@ class ServicesProvider implements ServiceProviderInterface {
 
 		$app[$namespace . '.locales'] = $config['locales'];
 
+		$app[$namespace . '.search_request_builder'] = $app->share(function ($app) use ($namespace, $config) {
+			return new Helper\SearchRequestBuilder(
+				array_keys($app[$namespace . '.locales'])
+			);
+		});
+
+		$app[$namespace . '.searcher'] = $app->share(function ($app) use ($namespace, $config) {
+			return new Helper\Searcher(
+				$app[$namespace . '.resource_finder']
+			);
+		});
+
 		$app[$namespace . '.resource_persister'] = $app->share(function ($app) use ($config) {
 			return new Helper\ResourcePersister();
 		});

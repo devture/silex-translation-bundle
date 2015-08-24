@@ -1,0 +1,22 @@
+{% extends 'DevtureTranslationBundle/layout.html.twig' %}
+
+{% block devture_translation_content %}
+	{% include 'DevtureTranslationBundle/navigation_bar.html.twig' with {'namespace': namespace, 'selected': 'search'} only %}
+
+	{%
+		include 'DevtureTranslationBundle/translation/search_form.html.twig' with {
+			'namespace': namespace,
+			'searchRequest': searchRequest,
+			'sourceResources': sourceResources,
+		} only
+	%}
+
+	{% if searchResults is not none %}
+		{%
+			include 'DevtureTranslationBundle/translation/search_results_list.html.twig' with {
+				'namespace': namespace,
+				'searchResults': searchResults,
+			} only
+		%}
+	{% endif %}
+{% endblock %}

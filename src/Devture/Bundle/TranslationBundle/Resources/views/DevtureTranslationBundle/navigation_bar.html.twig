@@ -1,0 +1,16 @@
+<div class="well well-sm">
+	<ul class="nav nav-pills">
+		<li class="{{ selected == 'overview' ? 'active' : '' }}">
+			<a href="{{ path(namespace ~ '.manage') }}">
+				<i class="fa fa-home"></i>
+				{{ ('devture_translation.overview')|trans }}
+			</a>
+		</li>
+		<li class="{{ selected == 'search' ? 'active' : '' }}">
+			<a href="{{ path(namespace ~ '.search') }}">
+				<i class="fa fa-search"></i>
+				{{ ('devture_translation.search')|trans }}
+			</a>
+		</li>
+	</ul>
+</div>

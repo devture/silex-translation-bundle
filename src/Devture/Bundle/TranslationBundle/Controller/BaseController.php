@@ -17,4 +17,18 @@ abstract class BaseController extends \Devture\Bundle\FrameworkBundle\Controller
 		return $this->getNs('resource_persister');
 	}
 
+	/**
+	 * @return \Devture\Bundle\TranslationBundle\Helper\SearchRequestBuilder
+	 */
+	protected function getSearchRequestBuilder() {
+		return $this->getNs('search_request_builder');
+	}
+
+	/**
+	 * @return \Devture\Bundle\TranslationBundle\Helper\Searcher
+	 */
+	protected function getSearcher() {
+		return $this->getNs('searcher');
+	}
+
 }

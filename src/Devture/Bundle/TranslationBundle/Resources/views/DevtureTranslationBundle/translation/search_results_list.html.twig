@@ -1,0 +1,38 @@
+{% if searchResults|length == 0 %}
+	{{ 'devture_translation.no_search_results_found'|trans }}
+{% else %}
+	<table class="table table-bordered table-condensed table-striped">
+		<tbody>
+			{% for searchResult in searchResults %}
+				{% set matched_resource = (searchResult.localizedResource is not none ? searchResult.localizedResource : searchResult.sourceResource) %}
+
+				{% set edit_link = none %}
+				{% if searchResult.localizedResource is not none %}
+					{%
+						set edit_link = (path(namespace ~ '.edit', {
+							'resourceId': searchResult.sourceResource.id,
+							'language': searchResult.localizedResource.localeKey,
+							'tab': 'all',
+						}) ~ '#' ~ searchResult.translationString.key)
+					%}
+				{% endif %}
+				<tr>
+					<td style="width: 1%;">
+						<i class="flag {{ matched_resource.localeKey }}"></i>
+					</td>
+					<td>
+						{{ matched_resource.name }}
+					</td>
+					<td>
+						<p class="help-block">
+							{% if edit_link is not none %}<a target="_blank" href="{{ edit_link }}">{% endif %}
+								{{ searchResult.translationString.key }}
+							{% if edit_link is not none %}</a>{% endif %}
+						</p>
+						<blockquote>{{ searchResult.translationString.value }}</blockquote>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endif %}

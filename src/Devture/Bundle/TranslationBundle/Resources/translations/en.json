@@ -6,7 +6,20 @@
 			"untranslated": "Untranslated",
 			"all": "All"
 		},
-		"save_translations": "Save Translations",
-		"error_while_saving_please_reload": "Error while saving. Reload the page and try again."
+		"btn": {
+			"search": "Search",
+			"save_translations": "Save Translations"
+		},
+		"choice": {
+			"all_languages": "-- All languages --",
+			"all_modules": "-- All modules --"
+		},
+		"placeholder": {
+			"search_keywords": "Search keywords.."
+		},
+		"error_while_saving_please_reload": "Error while saving. Reload the page and try again.",
+		"overview": "Overview",
+		"search": "Search",
+		"no_search_results_found": "No search results found."
 	}
 }

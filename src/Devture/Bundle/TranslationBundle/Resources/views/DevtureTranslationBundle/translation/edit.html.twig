@@ -1,6 +1,8 @@
-{% extends layout %}
+{% extends 'DevtureTranslationBundle/layout.html.twig' %}
 
-{% block content %}
+{% block devture_translation_content %}
+	{% include 'DevtureTranslationBundle/navigation_bar.html.twig' with {'namespace': namespace, 'selected': none} only %}
+
 	<h3 style="margin-top: 0;">
 		<a href="{{ path(namespace ~ '.manage') }}">{{ 'devture_translation.translations'|trans }}</a>
 		/
@@ -11,15 +13,18 @@
 		<div class="clearfix">
 			<div class="pull-left">
 				<div class="btn-group">
-					<button type="button" class="btn btn-sm btn-info active js-btn-type-change" data-type="untranslated">
+					<button type="button" class="btn btn-sm btn-info {{ tabToActivate == 'untranslated' ? 'active' : '' }} js-btn-type-change"
+						data-type="untranslated">
 						{{ 'devture_translation.list_type.untranslated'|trans }}
 						(<span id="js-count-untranslated">..</span>)
 					</button>
-					<button type="button" class="btn btn-sm btn-default js-btn-type-change" data-type="translated">
+					<button type="button" class="btn btn-sm btn-default {{ tabToActivate == 'translated' ? 'active' : '' }} js-btn-type-change"
+						data-type="translated">
 						{{ 'devture_translation.list_type.translated'|trans }}
 						(<span id="js-count-translated">..</span>)
 					</button>
-					<button type="button" class="btn btn-sm btn-default js-btn-type-change" data-type="all">
+					<button type="button" class="btn btn-sm btn-default {{ tabToActivate == 'all' ? 'active' : '' }} js-btn-type-change"
+						data-type="all">
 						{{ 'devture_translation.list_type.all'|trans }}
 						(<span id="js-count-all">..</span>)
 					</button>
@@ -31,7 +36,7 @@
 
 				<button class="btn btn-sm btn-primary" type="submit">
 					<i class="glyphicon glyphicon-floppy-disk"></i>
-					{{ 'devture_translation.save_translations'|trans }}
+					{{ 'devture_translation.btn.save_translations'|trans }}
 				</button>
 			</div>
 		</div>
@@ -58,6 +63,7 @@
 		<div style="max-height: 400px; height: auto; overflow-y: auto; overflow-x: hidden; padding-right: 10px;">
 			{% for translationString in localizedResource.translationPack %}
 				{% set sourceTranslationString = sourceResource.translationPack.getByKey(translationString.key) %}
+				<a id="{{ translationString.key }}"></a>
 				<div class="js-translation-container js-translation-container-{{ translationString.key|replace('.', '-') }}"
 					data-translated="{{ translationString.isTranslatedVersionOf(sourceTranslationString) ? 'true' : 'false' }}">
 					<small>{{ translationString.key }}</small>

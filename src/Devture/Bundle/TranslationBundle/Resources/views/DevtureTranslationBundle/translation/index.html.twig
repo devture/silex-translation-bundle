@@ -1,6 +1,8 @@
-{% extends layout %}
+{% extends 'DevtureTranslationBundle/layout.html.twig' %}
 
-{% block content %}
+{% block devture_translation_content %}
+	{% include 'DevtureTranslationBundle/navigation_bar.html.twig' with {'namespace': namespace, 'selected': 'overview'} only %}
+
 	{% for sourceResource in sourceResources %}
 		<h4 style="margin-top: 0;">{{ sourceResource.name }}</h4>
 

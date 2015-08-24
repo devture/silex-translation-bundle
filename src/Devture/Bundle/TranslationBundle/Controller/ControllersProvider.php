@@ -20,6 +20,9 @@ class ControllersProvider implements ControllerProviderInterface {
 		$controllers->get('/manage', $namespace . '.controller.management:indexAction')
 			->value('locale', $app['default_locale'])->bind($namespace . '.manage');
 
+		$controllers->get('/search', $namespace . '.controller.management:searchAction')
+			->value('locale', $app['default_locale'])->bind($namespace . '.search');
+
 		$controllers->match('/edit/{resourceId}/{language}', $namespace . '.controller.management:editAction')
 			->method('GET|POST')
 			->value('locale', $app['default_locale'])->bind($namespace . '.edit');
