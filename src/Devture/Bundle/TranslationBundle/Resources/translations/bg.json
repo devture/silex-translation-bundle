@@ -1,12 +1,25 @@
 {
 	"devture_translation": {
-		"translations": "Преводи",
-		"list_type": {
-			"translated": "Преведени",
-			"untranslated": "Непреведени",
-			"all": "Всички"
+		"btn": {
+			"save_translations": "Запази преводите",
+			"search": "Търсене"
 		},
-		"save_translations": "Запази преводите",
-		"error_while_saving_please_reload": "Грешка при запазването. Презаредете страницата и опитайте пак."
+		"choice": {
+			"all_languages": "-- Всички езици --",
+			"all_modules": "-- Всички модули --"
+		},
+		"error_while_saving_please_reload": "Грешка при запазването. Презаредете страницата и опитайте пак.",
+		"list_type": {
+			"all": "Всички",
+			"translated": "Преведени",
+			"untranslated": "Непреведени"
+		},
+		"no_search_results_found": "Не са намерени резултати от търсенето.",
+		"overview": "Основен преглед",
+		"placeholder": {
+			"search_keywords": "Търсене за .."
+		},
+		"search": "Търсене",
+		"translations": "Преводи"
 	}
 }
