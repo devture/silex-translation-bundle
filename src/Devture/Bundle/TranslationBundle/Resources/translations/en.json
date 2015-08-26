@@ -20,6 +20,13 @@
 		"error_while_saving_please_reload": "Error while saving. Reload the page and try again.",
 		"overview": "Overview",
 		"search": "Search",
-		"no_search_results_found": "No search results found."
+		"no_search_results_found": "No search results found.",
+		"badge": {
+			"source_language": "source language"
+		},
+		"warning": {
+			"editing_source_translations_invalidates": "Changing %language_name% translations invalidates the same translations for all other languages.",
+			"editing_source_translations_invalidates2": "Whatever you change here, would then have to be translated again to each language other than %language_name%."
+		}
 	}
 }

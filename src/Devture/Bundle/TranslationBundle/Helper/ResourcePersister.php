@@ -2,16 +2,16 @@
 namespace Devture\Bundle\TranslationBundle\Helper;
 
 use Devture\Bundle\TranslationBundle\Model\SourceResource;
-use Devture\Bundle\TranslationBundle\Model\LocalizedResource;
 use Devture\Bundle\TranslationBundle\Model\TranslationString;
+use Devture\Bundle\TranslationBundle\Model\ResourceInterface;
 
 class ResourcePersister {
 
-	public function persist(SourceResource $sourceResource, LocalizedResource $localizedResource) {
+	public function persist(SourceResource $sourceResource, ResourceInterface $translatedResource) {
 		$translations = array();
 
 		/* @var $translationString TranslationString */
-		foreach ($localizedResource->getTranslationPack() as $translationString) {
+		foreach ($translatedResource->getTranslationPack() as $translationString) {
 			if (!$translationString->getValue()) {
 				continue;
 			}
@@ -19,13 +19,26 @@ class ResourcePersister {
 			$hashes[$translationString->getKey()] = $translationString->getSourceValueHash();
 		}
 
-		ksort($translations);
-		ksort($hashes);
-
+		//Only sort the translations if we're dealing with a non-source resource.
+		//This is because source translations are most often edited manually,
+		//so their keys order is random (programmers don't usually alphabetically sort their translations).
+		//If we force-sort alphabetically the source resource, we'll pretty much overwrite the whole file
+		//(at least the first time we do this). We don't want to overwrite it, because that can very easily
+		//introduce merge conflicts for people that actively develop on the system (adding new translation strings)
+		//while someone else is using this tool to fix-up some translation.
+		if ($sourceResource !== $translatedResource) {
+			ksort($translations);
+		}
 		$translations = $this->unflatten($translations);
+		$result = @file_put_contents($translatedResource->getPath(), $this->jsonEncode($translations));
 
-		$result = @file_put_contents($localizedResource->getPath(), $this->jsonEncode($translations));
-		$result = @file_put_contents($localizedResource->getPath() . '.hash', $this->jsonEncode($hashes));
+		//Only save hashes for comparing with the source resource when persisting localized resources,
+		//not when editing the translations of the original source resource.
+		if ($sourceResource !== $translatedResource) {
+			ksort($hashes);
+			$result = @file_put_contents($translatedResource->getPath() . '.hash', $this->jsonEncode($hashes));
+		}
+
 		return (bool) $result;
 	}
 
@@ -48,7 +61,7 @@ class ResourcePersister {
 	}
 
 	private function jsonEncode(array $array) {
-		$text = json_encode($array, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+		$text = json_encode($array, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 
 		//JSON_PRETTY_PRINT makes json_encode() indent.
 		//However, it uses spaces, instead of tabs. We don't like that.

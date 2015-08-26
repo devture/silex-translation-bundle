@@ -6,16 +6,14 @@
 			{% for searchResult in searchResults %}
 				{% set matched_resource = (searchResult.localizedResource is not none ? searchResult.localizedResource : searchResult.sourceResource) %}
 
-				{% set localized_resource_edit_link = none %}
-				{% if searchResult.localizedResource is not none %}
-					{%
-						set localized_resource_edit_link = (path(namespace ~ '.edit', {
-							'resourceId': searchResult.sourceResource.id,
-							'language': searchResult.localizedResource.localeKey,
-							'tab': 'all',
-						}) ~ '#' ~ searchResult.translationString.key)
-					%}
-				{% endif %}
+				{%
+					set resource_edit_link = (path(namespace ~ '.edit', {
+						'resourceId': searchResult.sourceResource.id,
+						'language': matched_resource.localeKey,
+						'tab': 'all',
+					}) ~ '#' ~ searchResult.translationString.key)
+				%}
+
 				<tr>
 					<td style="width: 1%;">
 						<i class="flag {{ matched_resource.localeKey }}"></i>
@@ -25,14 +23,14 @@
 					</td>
 					<td>
 						<p class="help-block">
-							{% if localized_resource_edit_link is not none %}<a target="_blank" href="{{ localized_resource_edit_link }}">{% endif %}
+							<a target="_blank" href="{{ resource_edit_link }}">
 								{{ searchResult.translationString.key }}
-							{% if localized_resource_edit_link is not none %}</a>{% endif %}
+							</a>
 						</p>
 						<blockquote>{{ searchResult.translationString.value }}</blockquote>
 
 						{# Source translation result. Let's generate links for each language. #}
-						{% if localized_resource_edit_link is none %}
+						{% if searchResult.localizedResource is none %}
 							{% for localized_resource in searchResult.sourceResource.localizedResources %}
 								{% set localized_translation_string = localized_resource.translationPack.getByKey(searchResult.translationString.key) %}
 								{% if localized_translation_string is none %}
@@ -49,7 +47,8 @@
 									}) ~ '#' ~ searchResult.translationString.key)
 								%}
 
-								<a class="btn {{ localized_translation_string_is_translated ? 'btn-success' : 'btn-danger' }}"
+								<a target="_blank"
+									class="btn {{ localized_translation_string_is_translated ? 'btn-success' : 'btn-danger' }}"
 									href="{{ localized_resource_edit_link }}">
 									<i class="flag {{ localized_resource.localeKey }}"></i>
 									{{ devture_translation_get_locale_name(namespace, localized_resource.localeKey) }}

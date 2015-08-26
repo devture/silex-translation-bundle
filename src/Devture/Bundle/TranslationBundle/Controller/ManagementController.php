@@ -37,21 +37,27 @@ class ManagementController extends BaseController {
 			return $this->abort(404);
 		}
 
-		$localizedResource = $sourceResource->getLocalizedResourceByLocaleKey($language);
-		if ($localizedResource === null) {
-			return $this->abort(404);
+		if ($sourceResource->getLocaleKey() === $language) {
+			$translatableResource = $sourceResource;
+			$defaultTab = 'all';
+		} else {
+			$translatableResource = $sourceResource->getLocalizedResourceByLocaleKey($language);
+			if ($translatableResource === null) {
+				return $this->abort(404);
+			}
+
+			$translatableResource->getTranslationPack()->syncWithSource($sourceResource->getTranslationPack());
+			$defaultTab = 'untranslated';
 		}
 
-		$localizedResource->getTranslationPack()->syncWithSource($sourceResource->getTranslationPack());
-
 		if ($request->isMethod('POST')) {
-			$errors = $this->bindRequestToTranslationPack($request, $sourceResource->getTranslationPack(), $localizedResource->getTranslationPack());
+			$errors = $this->bindRequestToTranslationPack($request, $sourceResource->getTranslationPack(), $translatableResource->getTranslationPack());
 
 			if (count($errors) > 0) {
 				return $this->json(array('ok' => false, 'errors' => $errors));
 			}
 
-			$result = $this->getResourcePersister()->persist($sourceResource, $localizedResource);
+			$result = $this->getResourcePersister()->persist($sourceResource, $translatableResource);
 			if (!$result) {
 				return $this->json(array('ok' => false, 'errors' => array('Could not save the translation data.')));
 			}
@@ -60,21 +66,21 @@ class ManagementController extends BaseController {
 			/* @var $sourceTranslationString \Devture\Bundle\TranslationBundle\Model\TranslationString */
 			foreach ($sourceResource->getTranslationPack() as $sourceTranslationString) {
 				/* @var $translationString \Devture\Bundle\TranslationBundle\Model\TranslationString|NULL */
-				$translationString = $localizedResource->getTranslationPack()->getByKey($sourceTranslationString->getKey());
+				$translationString = $translatableResource->getTranslationPack()->getByKey($sourceTranslationString->getKey());
 				$packStatus[$sourceTranslationString->getKey()] = ($translationString === null ? false : $translationString->isTranslatedVersionOf($sourceTranslationString));
 			}
 
 			return $this->json(array('ok' => true, 'packStatus' => $packStatus));
 		}
 
-		$tabToActivate = $request->query->get('tab', 'untranslated');
+		$tabToActivate = $request->query->get('tab', $defaultTab);
 		if (!in_array($tabToActivate, array('untranslated', 'translated', 'all'))) {
-			$tabToActivate = 'untranslated';
+			$tabToActivate = $defaultTab;
 		}
 
 		return $this->renderView('DevtureTranslationBundle/translation/edit.html.twig', array(
 			'sourceResource' => $sourceResource,
-			'localizedResource' => $localizedResource,
+			'translatableResource' => $translatableResource,
 			'tabToActivate' => $tabToActivate,
 		));
 	}
@@ -90,9 +96,13 @@ class ManagementController extends BaseController {
 			$value = (string) (isset($translationData['translation']) ? $translationData['translation'] : null);
 			$sourceValueHash = (string) (isset($translationData['sourceValueHash']) ? $translationData['sourceValueHash'] : null);
 
-			if ($sourcePack->getByKey($key)->getSourceValueHash() !== $sourceValueHash) {
-				//The string being translated actually changed. Require a reload.
-				return array('The translation files have changed. Please reload the page and try again.');
+			//Only do this integrity check when translating into another language (when the source pack != target pack).
+			//Otherwise any change we make to the source translations would invalidate the form until a reload is done.
+			if ($sourcePack !== $targetPack) {
+				if ($sourcePack->getByKey($key)->getSourceValueHash() !== $sourceValueHash) {
+					//The original string being translated actually changed. Require a reload.
+					return array('The translation files have changed. Please reload the page and try again.');
+				}
 			}
 
 			$targetPack->getByKey($key)->setValue($value);

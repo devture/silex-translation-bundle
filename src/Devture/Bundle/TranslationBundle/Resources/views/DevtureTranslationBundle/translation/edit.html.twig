@@ -52,16 +52,33 @@
 			</div>
 			<div class="col-lg-offset-2 col-lg-5">
 				<h4 class="text-center" style="margin-top: 0;">
-					<i class="flag {{ localizedResource.localeKey }}"></i>
-					{{ devture_translation_get_locale_name(namespace, localizedResource.localeKey) }}
+					<i class="flag {{ translatableResource.localeKey }}"></i>
+					{{ devture_translation_get_locale_name(namespace, translatableResource.localeKey) }}
 				</h4>
 			</div>
 		</div>
 
 		<hr style="margin: 5px 0;" />
 
+		{% if sourceResource == translatableResource %}
+			<p class="alert alert-warning clearfix">
+				<i class="fa fa-3x fa-exclamation-triangle pull-left"></i>
+				{{
+					'devture_translation.warning.editing_source_translations_invalidates'|trans({
+						'%language_name%': devture_translation_get_locale_name(namespace, translatableResource.localeKey),
+					})
+				}}
+				<br />
+				{{
+					'devture_translation.warning.editing_source_translations_invalidates2'|trans({
+						'%language_name%': devture_translation_get_locale_name(namespace, translatableResource.localeKey),
+					})
+				}}
+			</p>
+		{% endif %}
+
 		<div style="max-height: 400px; height: auto; overflow-y: auto; overflow-x: hidden; padding-right: 10px;">
-			{% for translationString in localizedResource.translationPack %}
+			{% for translationString in translatableResource.translationPack %}
 				{% set sourceTranslationString = sourceResource.translationPack.getByKey(translationString.key) %}
 				<a id="{{ translationString.key }}"></a>
 				<div class="js-translation-container js-translation-container-{{ translationString.key|replace('.', '-') }}"
