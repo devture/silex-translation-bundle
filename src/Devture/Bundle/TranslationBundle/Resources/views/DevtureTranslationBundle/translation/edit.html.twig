@@ -62,7 +62,7 @@
 
 		{% if sourceResource == translatableResource %}
 			<p class="alert alert-warning clearfix">
-				<i class="fa fa-3x fa-exclamation-triangle pull-left"></i>
+				<i class="glyphicon glyphicon-exclamation-sign pull-left" style="font-size: 300%; margin-right: 10px;"></i>
 				{{
 					'devture_translation.warning.editing_source_translations_invalidates'|trans({
 						'%language_name%': devture_translation_get_locale_name(namespace, translatableResource.localeKey),
