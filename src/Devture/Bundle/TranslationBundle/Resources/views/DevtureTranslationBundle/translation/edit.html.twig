@@ -44,18 +44,21 @@
 		<hr style="margin: 7px 0;" />
 
 		<div class="row">
-			<div class="col-lg-5">
+			<div class="{% if sourceResource == translatableResource %} col-lg-6 col-lg-offset-3{% else %}col-lg-5{% endif %}">
 				<h4 class="text-center" style="margin-top: 0;">
 					<i class="flag {{ sourceResource.localeKey }}"></i>
 					{{ devture_translation_get_locale_name(namespace, sourceResource.localeKey) }}
+					<span class="label label-success">{{ 'devture_translation.badge.source_language'|trans }}</span>
 				</h4>
 			</div>
-			<div class="col-lg-offset-2 col-lg-5">
-				<h4 class="text-center" style="margin-top: 0;">
-					<i class="flag {{ translatableResource.localeKey }}"></i>
-					{{ devture_translation_get_locale_name(namespace, translatableResource.localeKey) }}
-				</h4>
-			</div>
+			{% if sourceResource != translatableResource %}
+				<div class="col-lg-offset-2 col-lg-5">
+					<h4 class="text-center" style="margin-top: 0;">
+						<i class="flag {{ translatableResource.localeKey }}"></i>
+						{{ devture_translation_get_locale_name(namespace, translatableResource.localeKey) }}
+					</h4>
+				</div>
+			{% endif %}
 		</div>
 
 		<hr style="margin: 5px 0;" />
