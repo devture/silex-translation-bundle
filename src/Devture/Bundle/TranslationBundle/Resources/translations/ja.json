@@ -1,5 +1,8 @@
 {
 	"devture_translation": {
+		"badge": {
+			"source_language": "元の言語"
+		},
 		"btn": {
 			"save_translations": "翻訳を保存",
 			"search": "検索する"
@@ -14,8 +17,16 @@
 			"translated": "翻訳済み",
 			"untranslated": "翻訳未対応"
 		},
+		"no_search_results_found": "該当する単語はありません。",
 		"overview": "ホーム",
+		"placeholder": {
+			"search_keywords": "単語を検索"
+		},
 		"search": "検索",
-		"translations": "翻訳"
+		"translations": "翻訳",
+		"warning": {
+			"editing_source_translations_invalidates": "%language_name%の翻訳を変更すると、該当する他の言語の翻訳もリセットされます。",
+			"editing_source_translations_invalidates2": "%language_name%以外の言語については、別途翻訳が必要となります。"
+		}
 	}
 }
