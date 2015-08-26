@@ -1,4 +1,5 @@
 {
+	"devture_translation.badge.source_language": "b27500b8737a2d000dd6e733ea12413c27d8f62c5a60637762a4c7bb4e016e2e",
 	"devture_translation.btn.save_translations": "253c6c423418cebc51977ddec3360b6af26fc8ed65b3738ce5544b1cec25d0f5",
 	"devture_translation.btn.search": "49c266baaaa70981ea188fa714d5c40cf13830d786a861c9943ae0d26a7f3fe9",
 	"devture_translation.choice.all_languages": "0270d172622dc4ececed7abeb53908d062a598c5147f6d1cdaed095715bbe6e4",
@@ -11,5 +12,7 @@
 	"devture_translation.overview": "d4b1ea5708dd532930a85188b45aff6f0a3ed458500c7577e0127a538eb0d100",
 	"devture_translation.placeholder.search_keywords": "21242e8169c114e648dc80eb8e50fb9a2de9dac96c9192e42a3a529eb5f2c4f2",
 	"devture_translation.search": "49c266baaaa70981ea188fa714d5c40cf13830d786a861c9943ae0d26a7f3fe9",
-	"devture_translation.translations": "266a41b90d4f831ea1626e6188606e9ba4fe3f9f72bdb65cb1626d364d212162"
+	"devture_translation.translations": "266a41b90d4f831ea1626e6188606e9ba4fe3f9f72bdb65cb1626d364d212162",
+	"devture_translation.warning.editing_source_translations_invalidates": "6fd195d14b806bdc0fdbf7f5d487177b71596b24eeb8be8b5acf331b2d03d9c4",
+	"devture_translation.warning.editing_source_translations_invalidates2": "bd8f34bd78e5306ef0eb2a8133a4b8fc344657caa21b2f1c0a8edbd63ce917ed"
 }

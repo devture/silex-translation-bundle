@@ -1,5 +1,8 @@
 {
 	"devture_translation": {
+		"badge": {
+			"source_language": "основен език"
+		},
 		"btn": {
 			"save_translations": "Запази преводите",
 			"search": "Търсене"
@@ -20,6 +23,10 @@
 			"search_keywords": "Търсене за .."
 		},
 		"search": "Търсене",
-		"translations": "Преводи"
+		"translations": "Преводи",
+		"warning": {
+			"editing_source_translations_invalidates": "Промяната на преводи за %language_name% прави невалидни същите преводи за всички останали езици.",
+			"editing_source_translations_invalidates2": "Който превод промените тук, ще трябва да бъде преведен отново на всеки друг език различен от %language_name%."
+		}
 	}
 }
