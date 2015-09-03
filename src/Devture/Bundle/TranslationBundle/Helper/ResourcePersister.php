@@ -12,10 +12,19 @@ class ResourcePersister {
 
 		/* @var $translationString TranslationString */
 		foreach ($translatedResource->getTranslationPack() as $translationString) {
-			if (!$translationString->getValue()) {
-				continue;
+			if ($sourceResource !== $translatedResource) {
+				//Only skip empty translations for the non-source locale.
+				//This is so that we can support partial translations for non-source languages.
+				//An empty translation means "not translated yet (use some other default translation)".
+				//
+				//If this is the source source, however, we don't want to allow skipping,
+				//because skipping unsets (deletes) keys from the source resource.
+				//We don't want to allow deletes to happen through here (only manually).
+				if (!$translationString->getValue()) {
+					continue;
+				}
 			}
-			$translations[$translationString->getKey()] = $translationString->getValue();
+			$translations[$translationString->getKey()] = (string) $translationString->getValue();
 			$hashes[$translationString->getKey()] = $translationString->getSourceValueHash();
 		}
 
