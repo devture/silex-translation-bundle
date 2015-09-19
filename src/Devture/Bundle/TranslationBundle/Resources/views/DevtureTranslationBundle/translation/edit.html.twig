@@ -100,6 +100,13 @@
 						<div class="col-lg-5">
 							<textarea class="form-control" name="translations[{{ translationString.key }}][translation]" tabindex="{{ loop.index }}">{{ translationString.value }}</textarea>
 							<input type="hidden" name="translations[{{ translationString.key }}][sourceValueHash]" value="{{ sourceTranslationString.sourceValueHash }}" />
+
+							{% if sourceResource == translatableResource %}
+								<label>
+									<input type="checkbox" name="translations[{{ translationString.key }}][minorSourceFix]" />
+									{{ 'devture_translation.minor_source_fix'|trans }}
+								</label>
+							{% endif %}
 						</div>
 					</div>
 

@@ -41,4 +41,8 @@ class TranslationString {
 		return ($this->getSourceValueHash() === $other->getSourceValueHash());
 	}
 
+	static public function calculateSourceValueHash($message) {
+		return hash('sha256', $message);
+	}
+
 }

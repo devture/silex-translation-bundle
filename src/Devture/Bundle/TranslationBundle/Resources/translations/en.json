@@ -21,12 +21,13 @@
 		"overview": "Overview",
 		"search": "Search",
 		"no_search_results_found": "No search results found.",
+		"minor_source_fix": "Minor correction. Keep existing translations for other languages.",
 		"badge": {
 			"source_language": "source language"
 		},
 		"warning": {
-			"editing_source_translations_invalidates": "Changing %language_name% translations invalidates the same translations for all other languages.",
-			"editing_source_translations_invalidates2": "Whatever you change here, would then have to be translated again to each language other than %language_name%."
+			"editing_source_translations_invalidates": "Changing %language_name% translations normally invalidates the same translations for all other languages.",
+			"editing_source_translations_invalidates2": "Whatever you change here, would then have to be translated again to each language other than %language_name% (unless you mark it as a Minor Correction)."
 		}
 	}
 }

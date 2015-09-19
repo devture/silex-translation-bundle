@@ -32,7 +32,7 @@ class ResourceTranslationPackLoader {
 
 		foreach ($flattened as $key => $value) {
 			if ($resource->isSource()) {
-				$sourceValueHash = $this->createTranslationValueHash($value);
+				$sourceValueHash = TranslationString::calculateSourceValueHash($value);
 			} else {
 				$sourceValueHash = (isset($hashes[$key]) ? $hashes[$key] : null);
 			}
@@ -58,10 +58,6 @@ class ResourceTranslationPackLoader {
 		$result = array();
 		$doFlatten($array, array(), $result);
 		return $result;
-	}
-
-	private function createTranslationValueHash($message) {
-		return hash('sha256', $message);
 	}
 
 }

@@ -35,6 +35,9 @@ class SourceResource implements ResourceInterface {
 		$this->localizedResources[] = $localizedResource;
 	}
 
+	/**
+	 * @return LocalizedResource[]
+	 */
 	public function getLocalizedResources() {
 		return $this->localizedResources;
 	}
