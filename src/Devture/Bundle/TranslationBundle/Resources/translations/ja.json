@@ -8,8 +8,8 @@
 			"search": "検索する"
 		},
 		"choice": {
-			"all_languages": "-- 全て言語 --",
-			"all_modules": "-- 全てモジュール --"
+			"all_languages": "-- 全ての言語 --",
+			"all_modules": "-- 全モジュール --"
 		},
 		"error_while_saving_please_reload": "エラーが発生しました。再読み込みしてからもう一度お試しください。",
 		"list_type": {
