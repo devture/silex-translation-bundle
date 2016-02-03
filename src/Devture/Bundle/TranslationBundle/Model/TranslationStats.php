@@ -23,7 +23,7 @@ class TranslationStats {
 		if ($this->totalCount === 0) {
 			return 0;
 		}
-		return round(($this->translatedCount / $this->totalCount) * 100);
+		return floor(($this->translatedCount / $this->totalCount) * 100);
 	}
 
 }
