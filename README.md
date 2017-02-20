@@ -5,7 +5,7 @@ and allows these files to be translated to all given languages (`locales`).
 
 A `{targetLanguage}.json` file is generated and saved next to `{sourceLanguage}.json` for each locale, whenever the translations for it are saved.
 
-A `{targetLanguage}.json.hint` file is also saved in the same directory.
+A `{targetLanguage}.json.hash` file is also saved in the same directory.
 It contains "hints" telling the translation system which source translation string a given translation is derived from.
 This is so that a translation can be considered outdated if the source translation string changes.
 At this moment, such outdated translations are considered new and untranslated.
@@ -40,7 +40,7 @@ TranslationBundle config example:
 		"locales": {
 			"en": {"key": "en", "name": "English"},
 			"bg": {"key": "bg", "name": "Bulgarian"},
-			"bg": {"key": "ja", "name": "Japanese"}
+			"ja": {"key": "ja", "name": "Japanese"}
 		}
 	}
 
