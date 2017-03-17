@@ -1,7 +1,7 @@
 {% if searchResults|length == 0 %}
 	{{ 'devture_translation.no_search_results_found'|trans }}
 {% else %}
-	<table class="table table-bordered table-condensed table-striped">
+	<table class="table table-bordered table-striped">
 		<tbody>
 			{% for searchResult in searchResults %}
 				{% set matched_resource = (searchResult.localizedResource is not none ? searchResult.localizedResource : searchResult.sourceResource) %}
@@ -48,7 +48,7 @@
 								%}
 
 								<a target="_blank"
-									class="btn {{ localized_translation_string_is_translated ? 'btn-success' : 'btn-danger' }}"
+									class="btn btn-sm {{ localized_translation_string_is_translated ? 'btn-outline-success' : 'btn-outline-danger' }}"
 									href="{{ localized_resource_edit_link }}">
 									<i class="flag {{ localized_resource.localeKey }}"></i>
 									{{ devture_translation_get_locale_name(namespace, localized_resource.localeKey) }}

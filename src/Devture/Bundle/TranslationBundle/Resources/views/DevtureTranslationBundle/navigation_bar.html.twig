@@ -1,16 +1,20 @@
-<div class="well well-sm">
-	<ul class="nav nav-pills">
-		<li class="{{ selected == 'overview' ? 'active' : '' }}">
-			<a href="{{ path(namespace ~ '.manage') }}">
-				<i class="glyphicon glyphicon-home"></i>
-				{{ ('devture_translation.overview')|trans }}
-			</a>
-		</li>
-		<li class="{{ selected == 'search' ? 'active' : '' }}">
-			<a href="{{ path(namespace ~ '.search') }}">
-				<i class="glyphicon glyphicon-search"></i>
-				{{ ('devture_translation.search')|trans }}
-			</a>
-		</li>
-	</ul>
+<div class="card mt-2 mb-2">
+	<div class="card-block">
+		<ul class="nav nav-pills">
+			<li class="nav-item">
+				<a class="nav-link {{ selected == 'overview' ? 'active' : '' }}"
+					href="{{ path(namespace ~ '.manage') }}">
+					<i class="fa fa-home"></i>
+					{{ ('devture_translation.overview')|trans }}
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link {{ selected == 'search' ? 'active' : '' }}"
+					href="{{ path(namespace ~ '.search') }}">
+					<i class="fa fa-search"></i>
+					{{ ('devture_translation.search')|trans }}
+				</a>
+			</li>
+		</ul>
+	</div>
 </div>
