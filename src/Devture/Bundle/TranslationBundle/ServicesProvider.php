@@ -1,10 +1,7 @@
 <?php
 namespace Devture\Bundle\TranslationBundle;
 
-use Silex\Application;
-use Silex\ServiceProviderInterface;
-
-class ServicesProvider implements ServiceProviderInterface {
+class ServicesProvider implements \Pimple\ServiceProviderInterface, \Silex\Api\BootableProviderInterface {
 
 	private $namespace;
 	private $config;
@@ -31,58 +28,59 @@ class ServicesProvider implements ServiceProviderInterface {
 		$this->config = $config;
 	}
 
-	public function register(Application $app) {
+	public function register(\Pimple\Container $container) {
 		$namespace = $this->namespace;
 		$config = $this->config;
 
-		$app[$namespace . '.base_path'] = $config['base_path'];
+		$container[$namespace . '.base_path'] = $config['base_path'];
 
-		$app[$namespace . '.locales'] = $config['locales'];
+		$container[$namespace . '.locales'] = $config['locales'];
 
-		$app[$namespace . '.search_request_builder'] = $app->share(function ($app) use ($namespace, $config) {
+		$container[$namespace . '.search_request_builder'] = function ($container) use ($namespace, $config) {
 			return new Helper\SearchRequestBuilder(
-				array_keys($app[$namespace . '.locales'])
+				array_keys($container[$namespace . '.locales'])
 			);
-		});
+		};
 
-		$app[$namespace . '.searcher'] = $app->share(function ($app) use ($namespace, $config) {
+		$container[$namespace . '.searcher'] = function ($container) use ($namespace, $config) {
 			return new Helper\Searcher(
-				$app[$namespace . '.resource_finder']
+				$container[$namespace . '.resource_finder']
 			);
-		});
+		};
 
-		$app[$namespace . '.resource_persister'] = $app->share(function ($app) use ($config) {
+		$container[$namespace . '.resource_persister'] = function ($container) use ($config) {
 			return new Helper\ResourcePersister();
-		});
+		};
 
-		$app[$namespace . '.resource_translation_pack_loader'] = $app->share(function ($app) use ($config) {
+		$container[$namespace . '.resource_translation_pack_loader'] = function ($container) use ($config) {
 			return new Helper\ResourceTranslationPackLoader();
-		});
+		};
 
-		$app[$namespace . '.resource_finder'] = $app->share(function ($app) use ($namespace, $config) {
+		$container[$namespace . '.resource_finder'] = function ($container) use ($namespace, $config) {
 			return new Helper\ResourceFinder(
-				$app[$namespace . '.base_path'],
+				$container[$namespace . '.base_path'],
 				$config['source_language_locale_key'],
-				$app[$namespace . '.locales'],
-				$app[$namespace . '.resource_translation_pack_loader']
+				$container[$namespace . '.locales'],
+				$container[$namespace . '.resource_translation_pack_loader']
 			);
-		});
+		};
 
-		$this->registerControllerServices($app);
+		$this->registerControllerServices($container);
 	}
 
-	private function registerControllerServices(Application $app) {
+	private function registerControllerServices(\Pimple\Container $container) {
 		$namespace = $this->namespace;
 
-		$app[$namespace . '.controllers_provider.management'] = $app->share(function ($app) use ($namespace) {
+		$container[$namespace . '.controllers_provider.management'] = function ($container) use ($namespace) {
 			return new Controller\ControllersProvider($namespace);
-		});
-		$app[$namespace . '.controller.management'] = $app->share(function ($app) use ($namespace) {
-			return new Controller\ManagementController($app, $namespace);
-		});
+		};
+
+		$container[$namespace . '.controller.management'] = function ($container) use ($namespace) {
+			return new Controller\ManagementController($container, $namespace);
+		};
 	}
 
-	public function boot(Application $app) {
+	public function boot(\Silex\Application $app) {
 		$app['devture_localization.translator.resource_loader']->addResources(__DIR__ . '/Resources/translations/');
 
 		//Also register the templates path at a custom namespace, to allow templates overriding+extending.

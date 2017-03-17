@@ -5,7 +5,7 @@ class TranslationExtension extends \Twig_Extension {
 
 	private $container;
 
-	public function __construct(\Pimple $container) {
+	public function __construct(\Pimple\Container $container) {
 		$this->container = $container;
 	}
 
@@ -15,14 +15,14 @@ class TranslationExtension extends \Twig_Extension {
 
 	public function getFilters() {
 		return array(
-			'trans' => new \Twig_Filter_Method($this, 'trans'),
-			'transchoice' => new \Twig_Filter_Method($this, 'transchoice'),
+			new \Twig_SimpleFilter('trans', array($this, 'trans')),
+			new \Twig_SimpleFilter('transchoice', array($this, 'transchoice')),
 		);
 	}
 
 	public function getFunctions() {
 		return array(
-			'devture_translation_get_locale_name' => new \Twig_Function_Method($this, 'getLocaleName'),
+			new \Twig_SimpleFunction('devture_translation_get_locale_name', array($this, 'getLocaleName')),
 		);
 	}
 
@@ -54,8 +54,8 @@ class TranslationExtension extends \Twig_Extension {
 
 	private function isDebug() {
 		try {
-			return $this->container['request']->query->has('__debug_translate__');
-		} catch (\RuntimeException $e) {
+			return $this->container['request_stack']->getCurrentRequest()->query->has('__debug_translate__');
+		} catch (\LogicException $e) {
 			return false;
 		}
 	}

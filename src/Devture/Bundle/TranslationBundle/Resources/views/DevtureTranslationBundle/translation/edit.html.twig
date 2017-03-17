@@ -84,7 +84,7 @@
 			{% for translationString in translatableResource.translationPack %}
 				{% set sourceTranslationString = sourceResource.translationPack.getByKey(translationString.key) %}
 				<a id="{{ translationString.key }}"></a>
-				<div class="js-translation-container js-translation-container-{{ translationString.key|replace('.', '-') }}"
+				<div class="js-translation-container js-translation-container-{{ translationString.key|replace({'.': '-'}) }}"
 					data-translated="{{ translationString.isTranslatedVersionOf(sourceTranslationString) ? 'true' : 'false' }}">
 					<small>{{ translationString.key }}</small>
 
@@ -164,7 +164,7 @@
 				"type": "post",
 				"dataType": "json",
 				"data": data,
-				"url": {{ app.request.requestUri|json_encode|raw }}
+				"url": {{ global.request.requestUri|json_encode|raw }}
 			}).done(function (response) {
 				if (response.ok) {
 					$('#js-success-indicator').css('visibility', 'visible');

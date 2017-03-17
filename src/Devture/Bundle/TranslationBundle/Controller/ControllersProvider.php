@@ -1,11 +1,7 @@
 <?php
 namespace Devture\Bundle\TranslationBundle\Controller;
 
-use Silex\Application;
-use Silex\ControllerProviderInterface;
-use Devture\Bundle\ReservationBundle\Controller\ManagementController;
-
-class ControllersProvider implements ControllerProviderInterface {
+class ControllersProvider implements \Silex\Api\ControllerProviderInterface {
 
 	private $namespace;
 
@@ -13,7 +9,7 @@ class ControllersProvider implements ControllerProviderInterface {
 		$this->namespace = $namespace;
 	}
 
-	public function connect(Application $app) {
+	public function connect(\Silex\Application $app) {
 		$namespace = $this->namespace;
 		$controllers = $app['controllers_factory'];
 
